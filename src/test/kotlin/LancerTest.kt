@@ -22,4 +22,25 @@ class LancerTest {
     fun `score nul pour un echec`() {
         Lancer().score shouldBe 0
     }
+
+    @Test
+    fun `les joueurs lancent chacun a leur tour`() {
+        val maPartie = Partie(
+            joueurs = listOf(
+                Joueur("Ernest"),
+                Joueur("Joséphine"),
+                Joueur("Julien")
+            )
+        )
+
+        val etatDeLaPartieApres1Coup = maPartie.enregistre(Lancer(q1 = true))
+        etatDeLaPartieApres1Coup.joueurCourant shouldBe Joueur("Joséphine")
+
+        val etatDeLaPartieApres2Coups = maPartie.enregistre(Lancer(q3 = true, q7 = true))
+        etatDeLaPartieApres2Coups.joueurCourant shouldBe Joueur("Julien")
+
+         val etatDeLaPartieApres3Coups  = maPartie.enregistre(Lancer(q3 = true, q7 = true))
+        etatDeLaPartieApres3Coups.joueurCourant shouldBe Joueur("Ernest")
+
+    }
 }

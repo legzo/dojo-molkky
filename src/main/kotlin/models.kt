@@ -51,3 +51,17 @@ class Lancer(
 enum class Quille(val valeur: Int) {
     Q1(1), Q2(2), Q3(3), Q4(4), Q5(5), Q6(6), Q7(7), Q8(8), Q9(9), Q10(10), Q11(11), Q12(12)
 }
+
+data class Joueur(val nom: String)
+
+class Partie(val joueurs: List<Joueur>) {
+
+    private var tour = 0
+
+    fun enregistre(lancer: Lancer): EtatDePartie {
+        tour++
+        return EtatDePartie(joueurCourant = joueurs.elementAt(tour % joueurs.size))
+    }
+}
+
+data class EtatDePartie(val joueurCourant: Joueur)

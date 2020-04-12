@@ -57,11 +57,27 @@ data class Joueur(val nom: String)
 class Partie(val joueurs: List<Joueur>) {
 
     private var tour = 0
+    private val scores =
+        joueurs.map { it to 0 }.toMap().toMutableMap()
 
     fun enregistre(lancer: Lancer): EtatDePartie {
+
+        val scorePrecedent = scores[joueurCourant()] ?: throw IllegalStateException()
+
+        scores[joueurCourant()] = scorePrecedent + lancer.score
+
         tour++
-        return EtatDePartie(joueurCourant = joueurs.elementAt(tour % joueurs.size))
+
+        return EtatDePartie(
+            joueurCourant = joueurCourant(),
+            scores = scores
+        )
     }
+
+    private fun joueurCourant() = joueurs.elementAt(tour % joueurs.size)
 }
 
-data class EtatDePartie(val joueurCourant: Joueur)
+data class EtatDePartie(
+    val joueurCourant: Joueur,
+    val scores: Map<Joueur, Int>
+)

@@ -14,7 +14,7 @@ cf. [règles officielles fédération](http://www.ff-molkky.fr/telecharger/regle
 
 5. [x] Lorsqu’une quille a été abattue, on la redresse sur son pied (et non à la tête), le numéro face à la zone de lancer, juste là où elle se trouve et sans la soulever du sol. C’est ainsi qu’au cours de la partie, les quilles s’éparpillent et s’éloignent.
 
-6. [ ] Les joueurs (ou équipes) jouent chacun à leur tour.
+6. [x] Les joueurs (ou équipes) jouent chacun à leur tour.
 
 7. [ ] Un tirage au sort (pile/face) détermine l’équipe qui commence la première manche.
 
@@ -27,7 +27,7 @@ Tous les styles de lancers sont autorisés, à partir du moment où le lancer n�
 Il y a deux façons de marquer des points :
 
 - [x] si un joueur fait tomber plusieurs quilles, il gagne autant de points que de quilles abattues.
-- [ ] si un joueur fait tomber une seule quille, il gagne autant de points que le nombre inscrit dessus.
+- [x] si un joueur fait tomber une seule quille, il gagne autant de points que le nombre inscrit dessus.
 
 ### Élimination
 
@@ -37,4 +37,4 @@ Il y a deux façons de marquer des points :
 
 - [ ] L’équipe gagnante est la première qui arrive à totaliser exactement 50 points.
 
-- [ ] Si une équipe dépasse ce score, elle retombe à 25.
+- [x] Si une équipe dépasse ce score, elle retombe à 25.

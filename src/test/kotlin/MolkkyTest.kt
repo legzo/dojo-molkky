@@ -74,6 +74,22 @@ class MolkkyTest {
             etatApres4Coups.scores[jojo] shouldBe 10
 
         }
+
+        @Test
+        fun `si un joueur depasse 50 points il retombe a 25`() {
+            val ernest = Joueur("Ernest")
+            val maPartie = Partie(joueurs= listOf(ernest))
+
+            maPartie.enregistre(Lancer(q12 = true))
+            maPartie.enregistre(Lancer(q12 = true))
+            maPartie.enregistre(Lancer(q12 = true))
+            maPartie.enregistre(Lancer(q12 = true)) // 48
+            val etatATester = maPartie.enregistre(Lancer(q3 = true))  // 48 + 3 = 51 ! dommage !
+
+            etatATester.scores[ernest] shouldBe 25
+        }
+
+
     }
 
 

@@ -60,11 +60,16 @@ class Partie(val joueurs: List<Joueur>) {
     private val scores =
         joueurs.map { it to 0 }.toMap().toMutableMap()
 
+    private val scoreMaximal = 50
+    private val scoreDePenalite = 25
+
     fun enregistre(lancer: Lancer): EtatDePartie {
 
         val scorePrecedent = scores[joueurCourant()] ?: throw IllegalStateException()
 
-        scores[joueurCourant()] = scorePrecedent + lancer.score
+        val futurScore = scorePrecedent + lancer.score
+
+        scores[joueurCourant()] = if (futurScore <= scoreMaximal) futurScore else scoreDePenalite
 
         tour++
 

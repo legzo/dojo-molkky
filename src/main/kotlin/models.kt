@@ -69,11 +69,15 @@ class Partie(val joueurs: List<Joueur>) {
 
         val futurScore = scorePrecedent + lancer.score
 
-        scores[joueurCourant()] = if (futurScore <= scoreMaximal) futurScore else scoreDePenalite
+        scores[joueurCourant()] = when  {
+            futurScore > scoreMaximal -> scoreDePenalite
+            futurScore == scoreMaximal -> return PartieTerminee(vainqueur = joueurCourant())
+            else -> futurScore
+        }
 
         tour++
 
-        return EtatDePartie(
+        return PartieEnCours(
             joueurCourant = joueurCourant(),
             scores = scores
         )
@@ -82,7 +86,13 @@ class Partie(val joueurs: List<Joueur>) {
     private fun joueurCourant() = joueurs.elementAt(tour % joueurs.size)
 }
 
-data class EtatDePartie(
+sealed class EtatDePartie
+
+data class PartieEnCours(
     val joueurCourant: Joueur,
     val scores: Map<Joueur, Int>
-)
+) : EtatDePartie()
+
+data class PartieTerminee(
+    val vainqueur: Joueur
+) : EtatDePartie()

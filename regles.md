@@ -8,7 +8,7 @@ cf. [règles officielles fédération](http://www.ff-molkky.fr/telecharger/regle
 
 2. [x] Les quilles sont marquées de 1 à 12.
 
-3. [ ] La première équipe arrivant à totaliser exactement 50 points gagne la partie
+3. [x] La première équipe arrivant à totaliser exactement 50 points gagne la partie
 
 4. [x] Au début d’une partie, les quilles sont placées à environ 4 mètres des joueurs.
 
@@ -35,6 +35,6 @@ Il y a deux façons de marquer des points :
 
 ## Fin de partie
 
-- [ ] L’équipe gagnante est la première qui arrive à totaliser exactement 50 points.
+- [x] L’équipe gagnante est la première qui arrive à totaliser exactement 50 points.
 
 - [x] Si une équipe dépasse ce score, elle retombe à 25.

@@ -1,3 +1,4 @@
+import io.kotlintest.matchers.types.shouldBeTypeOf
 import io.kotlintest.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -44,13 +45,20 @@ class MolkkyTest {
             val maPartie = Partie(joueurs = listOf(ernest, jojo, julien))
 
             val etatDeLaPartieApres1Coup = maPartie.enregistre(Lancer(q1 = true))
-            etatDeLaPartieApres1Coup.joueurCourant shouldBe jojo
+
+            etatDeLaPartieApres1Coup.shouldBeTypeOf<PartieEnCours> {
+                it.joueurCourant shouldBe jojo
+            }
 
             val etatDeLaPartieApres2Coups = maPartie.enregistre(Lancer(q3 = true, q7 = true))
-            etatDeLaPartieApres2Coups.joueurCourant shouldBe julien
+            etatDeLaPartieApres2Coups.shouldBeTypeOf<PartieEnCours> {
+                it.joueurCourant shouldBe julien
+            }
 
             val etatDeLaPartieApres3Coups = maPartie.enregistre(Lancer(q3 = true, q7 = true))
-            etatDeLaPartieApres3Coups.joueurCourant shouldBe ernest
+            etatDeLaPartieApres3Coups.shouldBeTypeOf<PartieEnCours> {
+                it.joueurCourant shouldBe ernest
+            }
         }
 
         @Test
@@ -63,22 +71,26 @@ class MolkkyTest {
             maPartie.enregistre(Lancer(q12 = true))
             val etatApres2Coups = maPartie.enregistre(Lancer(q8 = true))
 
-            etatApres2Coups.joueurCourant shouldBe ernest
-            etatApres2Coups.scores[ernest] shouldBe 12
-            etatApres2Coups.scores[jojo] shouldBe 8
+            etatApres2Coups.shouldBeTypeOf<PartieEnCours> {
+                it.joueurCourant shouldBe ernest
+                it.scores[ernest] shouldBe 12
+                it.scores[jojo] shouldBe 8
+            }
 
             maPartie.enregistre(Lancer(q12 = true))
             val etatApres4Coups = maPartie.enregistre(Lancer(q1 = true, q4 = true))
 
-            etatApres4Coups.scores[ernest] shouldBe 24
-            etatApres4Coups.scores[jojo] shouldBe 10
+            etatApres4Coups.shouldBeTypeOf<PartieEnCours> {
+                it.scores[ernest] shouldBe 24
+                it.scores[jojo] shouldBe 10
+            }
 
         }
 
         @Test
         fun `si un joueur depasse 50 points il retombe a 25`() {
             val ernest = Joueur("Ernest")
-            val maPartie = Partie(joueurs= listOf(ernest))
+            val maPartie = Partie(joueurs = listOf(ernest))
 
             maPartie.enregistre(Lancer(q12 = true))
             maPartie.enregistre(Lancer(q12 = true))
@@ -86,10 +98,25 @@ class MolkkyTest {
             maPartie.enregistre(Lancer(q12 = true)) // 48
             val etatATester = maPartie.enregistre(Lancer(q3 = true))  // 48 + 3 = 51 ! dommage !
 
-            etatATester.scores[ernest] shouldBe 25
+            etatATester.shouldBeTypeOf<PartieEnCours> {
+                it.scores[ernest] shouldBe 25
+            }
+
         }
 
+        @Test
+        fun `si un joueur arrive pile a 50 points il gagne et la partie s'arrete`() {
+            val ernest = Joueur("ernest")
+            val maPartie = Partie(joueurs = listOf(ernest))
 
+            maPartie.enregistre(Lancer(q12 = true))
+            maPartie.enregistre(Lancer(q12 = true))
+            maPartie.enregistre(Lancer(q12 = true))
+            maPartie.enregistre(Lancer(q12 = true))
+            val etatFinal = maPartie.enregistre(Lancer(q2 = true)) // 48 + 2 = 50 : gagné !
+
+            etatFinal shouldBe PartieTerminee(vainqueur = ernest)
+        }
     }
 
 

@@ -58,29 +58,51 @@ class Partie(val joueurs: List<Joueur>) {
 
     private var tour = 0
     private val scores =
-        joueurs.map { it to 0 }.toMap().toMutableMap()
+        joueurs.map { it to mutableListOf(0) }.toMap().toMutableMap()
 
     private val scoreMaximal = 50
     private val scoreDePenalite = 25
 
     fun enregistre(lancer: Lancer): EtatDePartie {
 
-        val scorePrecedent = scores[joueurCourant()] ?: throw IllegalStateException()
+        val historiqueDuJoueurCourant = scores[joueurCourant()] ?: throw IllegalStateException()
 
-        val futurScore = scorePrecedent + lancer.score
+        val nouveauScore = calculeNouveauScore(historiqueDuJoueurCourant.last(), lancer)
+        historiqueDuJoueurCourant.add(nouveauScore)
 
-        scores[joueurCourant()] = when  {
-            futurScore > scoreMaximal -> scoreDePenalite
-            futurScore == scoreMaximal -> return PartieTerminee(vainqueur = joueurCourant())
-            else -> futurScore
-        }
+        elimineJoueurCourantSiNecessaire(historiqueDuJoueurCourant)
 
         tour++
 
-        return PartieEnCours(
-            joueurCourant = joueurCourant(),
-            scores = scores
-        )
+        return if (nouveauScore < scoreMaximal) {
+            PartieEnCours(
+                joueurCourant = joueurCourant(),
+                scores = scores.mapValues { (_, historique) -> historique.last() }
+            )
+        } else PartieTerminee(vainqueur = joueurCourant())
+    }
+
+    private fun elimineJoueurCourantSiNecessaire(historiqueDuJoueurCourant: MutableList<Int>) {
+        if (historiqueDuJoueurCourant.size > 3
+            && historiqueDuJoueurCourant
+                .takeLast(4)
+                .distinct()
+                .count() == 1
+        ) {
+            scores.remove(joueurCourant())
+        }
+    }
+
+    private fun calculeNouveauScore(
+        scorePrecedent: Int,
+        lancer: Lancer
+    ): Int {
+        val futurScore = scorePrecedent + lancer.score
+
+        return when {
+            futurScore > scoreMaximal -> scoreDePenalite
+            else -> futurScore
+        }
     }
 
     private fun joueurCourant() = joueurs.elementAt(tour % joueurs.size)

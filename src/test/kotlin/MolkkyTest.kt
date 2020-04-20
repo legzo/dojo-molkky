@@ -117,6 +117,25 @@ class MolkkyTest {
 
             etatFinal shouldBe PartieTerminee(vainqueur = ernest)
         }
+
+        @Test
+        fun `si un joueur fait 3 blancs consecutifs il est elimine`() {
+            val ernest = Joueur("ernest")
+            val jojo = Joueur("jojo")
+
+            val maPartie = Partie(joueurs = listOf(ernest, jojo))
+
+            maPartie.enregistre(Lancer())
+            maPartie.enregistre(Lancer(q1 = true))
+            maPartie.enregistre(Lancer())
+            maPartie.enregistre(Lancer(q1 = true))
+            val etatATester = maPartie.enregistre(Lancer())
+
+            etatATester.shouldBeTypeOf<PartieEnCours> {
+                it.joueurCourant shouldBe jojo
+                it.scores shouldBe mapOf(jojo to 2)
+            }
+        }
     }
 
 

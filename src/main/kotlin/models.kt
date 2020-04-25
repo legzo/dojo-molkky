@@ -25,6 +25,7 @@ class Lancer(
     q11: Boolean = false,
     q12: Boolean = false
 ) {
+
     private val quillesTombees = mutableSetOf<Quille>().apply {
         if (q1) add(Q1)
         if (q2) add(Q2)
@@ -40,10 +41,11 @@ class Lancer(
         if (q12) add(Q12)
     }.toSet()
 
-    val score = if (quillesTombees.size == 1) {
-        quillesTombees.first().valeur
-    } else {
-        quillesTombees.size
+    private val nombreDeQuillesTombees = quillesTombees.size
+
+    val score = when (nombreDeQuillesTombees) {
+        1 -> quillesTombees.first().valeur
+        else -> nombreDeQuillesTombees
     }
 
 }
@@ -85,9 +87,9 @@ class Partie(val joueurs: List<Joueur>) {
     private fun elimineJoueurCourantSiNecessaire(historiqueDuJoueurCourant: MutableList<Int>) {
         if (historiqueDuJoueurCourant.size > 3
             && historiqueDuJoueurCourant
-                .takeLast(4)
-                .distinct()
-                .count() == 1
+                .zipWithNext { current, next -> next - current }
+                .takeLast(3)
+                .all { it == 0 }
         ) {
             scores.remove(joueurCourant())
         }
